@@ -65,7 +65,9 @@ const Home = ({ type = "now_playing" }: HomeProps) => {
             <Movie>
               <div>
                 <Image
-                  src={movie.poster_path}
+                  src={movie.poster_path || "/"}
+                  blurDataURL={movie.poster_path || "/"}
+                  placeholder="blur"
                   alt={movie.title}
                   loader={imageLoader}
                   width={100}
