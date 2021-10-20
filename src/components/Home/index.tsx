@@ -1,4 +1,5 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
+import { Icon } from "@iconify/react";
 import Image from "next/image";
 import Link from "next/link";
 import { Movie as MovieType, MoviesResponse } from "../../@types/movie";
@@ -8,6 +9,7 @@ import {
   Movie,
   MovieAverage,
   MoviesContainer,
+  SearchComponent,
   Title,
 } from "./styles";
 import { imageLoader } from "../../utils/loaders";
@@ -23,6 +25,8 @@ const Home = ({ type = "now_playing" }: HomeProps) => {
   const [page, setPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
   const [hasMore, setHasMore] = useState(true);
+  const searchInput = useRef<HTMLInputElement>(null);
+  const [search, setSearch] = useState("");
 
   useEffect(() => {
     setPage(1);
@@ -30,16 +34,22 @@ const Home = ({ type = "now_playing" }: HomeProps) => {
 
   useEffect(() => {
     api
-      .get<MoviesResponse>(`movie/${type}`, {
-        params: {
-          page,
-        },
-      })
+      .get<MoviesResponse>(
+        `${search.length ? "search/" : ""}movie/${search.length ? "" : type}`,
+        {
+          params: {
+            page,
+            query: search,
+          },
+        }
+      )
       .then((response) => {
-        const newMovies = response.data.results.map((movie) => ({
-          ...movie,
-          genres: movie.genre_ids.map((id) => getGenre(id)) || [],
-        }));
+        const newMovies = response.data.results
+          .map((movie) => ({
+            ...movie,
+            genres: movie.genre_ids.map((id) => getGenre(id)) || [],
+          }))
+          .filter((movie) => movie.poster_path);
 
         setTotalPages(response.data.total_pages);
         setHasMore(page < totalPages);
@@ -49,11 +59,28 @@ const Home = ({ type = "now_playing" }: HomeProps) => {
           setMovies([...movies, ...newMovies]);
         }
       });
-  }, [genres, type, page]);
+  }, [genres, type, page, search]);
+
+  const handleFocusSearch = () => {
+    if (!searchInput.current) return;
+
+    searchInput.current.focus();
+  };
 
   return (
     <Container>
-      <Title>Now playing movies</Title>
+      <SearchComponent>
+        <input
+          type="text"
+          ref={searchInput}
+          value={search}
+          onChange={(e) => setSearch(e.target.value)}
+        />
+        <div className="icon" onClick={handleFocusSearch}>
+          <Icon icon="akar-icons:search" />
+        </div>
+      </SearchComponent>
+      <Title>{search.length ? `Searching ${search}` : "All movies"}</Title>
       <MoviesContainer
         hasMore={hasMore}
         next={() => setPage(page + 1)}

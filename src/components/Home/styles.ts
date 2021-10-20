@@ -87,4 +87,60 @@ const MovieAverage = styled.div`
   transition: all 0.3s ease-in-out;
 `;
 
-export { Container, Title, MoviesContainer, Movie, MovieAverage };
+const SearchComponent = styled.div`
+  width: 300px;
+  height: 100px;
+  position: absolute;
+  top: 2em;
+  right: 2em;
+  color: var(--white);
+
+  input {
+    outline: none;
+    background: var(--green-400);
+    color: var(--white);
+    border: none;
+    border-radius: 50px;
+    padding: 0 25px;
+    font-size: 15px;
+    height: 50px;
+    width: 0px;
+    box-sizing: border-box;
+    transition: all 0.7s ease-in-out;
+    position: absolute;
+    top: 0;
+    right: 0;
+
+    &:focus {
+      width: 100%;
+    }
+  }
+
+  .icon {
+    position: absolute;
+    background: var(--green-400);
+    width: 50px;
+    height: 50px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border: none;
+    border-radius: 50%;
+    font-size: 20px;
+    top: 0;
+    right: 0;
+    outline: none;
+    transition: all 0.5s ease;
+    box-shadow: 0px 0px 23px 8px rgba(0, 0, 0, 0.3);
+    cursor: pointer;
+  }
+`;
+
+export {
+  Container,
+  Title,
+  MoviesContainer,
+  Movie,
+  MovieAverage,
+  SearchComponent,
+};
