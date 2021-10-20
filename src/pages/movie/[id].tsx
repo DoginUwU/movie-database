@@ -16,7 +16,7 @@ import {
   MovieImage,
   MovieInfo,
   Title,
-} from "./style";
+} from "../../styles/movie.styles";
 
 interface MovieProps {
   id: number;
