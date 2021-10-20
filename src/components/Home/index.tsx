@@ -30,7 +30,7 @@ const Home = ({ type = "now_playing" }: HomeProps) => {
 
   useEffect(() => {
     setPage(1);
-  }, [type]);
+  }, [type, search]);
 
   useEffect(() => {
     api
