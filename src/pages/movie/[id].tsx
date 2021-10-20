@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { GetStaticPaths, GetStaticProps } from "next";
+import { GetStaticPaths } from "next";
 import Image from "next/image";
 import Link from "next/link";
 import { Movie as MovieType, Cast } from "../../@types/movie";
@@ -18,7 +18,11 @@ import {
   Title,
 } from "./style";
 
-const Movie = ({ id }) => {
+interface MovieProps {
+  id: number;
+}
+
+const Movie = ({ id }: MovieProps) => {
   const [movie, setMovie] = useState<MovieType>();
   const [casts, setCasts] = useState<Cast[]>();
 
@@ -129,7 +133,7 @@ const getStaticPaths: GetStaticPaths = async () => {
   };
 };
 
-const getStaticProps: GetStaticProps = async ({ params }) => {
+const getStaticProps = async ({ params }: { params: MovieProps }) => {
   const { id } = params;
   return {
     props: {
